@@ -4,6 +4,7 @@ import com.example.usercenterbackendmaster.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author dell
@@ -37,6 +38,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     int userLogout(HttpServletRequest request);
+
+    /**
+     *
+     */
+    int searchUsersByTags(List<String> tagNameList);
 
     /**
      * 用户脱敏
