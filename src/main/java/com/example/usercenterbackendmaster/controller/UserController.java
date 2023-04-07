@@ -10,6 +10,7 @@ import com.example.usercenterbackendmaster.model.domain.request.UserLoginRequest
 import com.example.usercenterbackendmaster.model.domain.request.UserRegisterRequest;
 import com.example.usercenterbackendmaster.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -131,6 +132,20 @@ public class UserController {
         List<User> userList = userService.list(queryWrapper);
         List<User> result = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 根据标签搜索用户
+     * @param tagNameList 标签列表
+     * @return
+     */
+    @GetMapping("/search/tags")
+    public BaseResponse<List<User>> searchUserByTags(@RequestParam(required = false) List<String> tagNameList) {
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<User> userList = userService.searchUsersByTags(tagNameList);
+        return ResultUtils.success(userList);
     }
 
     /**
