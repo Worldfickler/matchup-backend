@@ -4,16 +4,25 @@ spring:
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/userdatabase?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC&amp;useSSL=false
     url: jdbc:mysql://localhost:3306/userdatabase
     username: root
     password: '011216'
+
   # session 失效时间
   session:
     timeout: 86400
+    store-type: redis
 
   mvc:
     path match:
       matching-strategy: ant_path_matcher
+
+  #redis
+  redis:
+    port: 6379
+    host: localhost
+    database: 0
 
   profiles:
     active: dev
@@ -30,3 +39,6 @@ server:
   port: 8080
   servlet:
     context-path: /api
+    session:
+      cookie:
+        domain:

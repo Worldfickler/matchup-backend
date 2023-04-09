@@ -29,7 +29,7 @@ import static com.example.usercenterbackendmaster.constant.UserConstant.USER_LOG
 
 @RestController
 @RequestMapping("/user")
-//@CrossOrigin(origins = {"https://user-center.icu"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://127.0.0.1:5173"})
 public class UserController {
 
     @Resource
@@ -122,7 +122,7 @@ public class UserController {
      */
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUser(String username, HttpServletRequest request) {
-        if (!isAdmin(request)) {
+        if (!userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -149,6 +149,23 @@ public class UserController {
     }
 
     /**
+     * 更新用户信息
+     * @param user 用户信息
+     * @param request 用户登录状态
+     * @return
+     */
+    @PostMapping("/update")
+    public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {
+        // 校验参数是否为空
+        if (user == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        int result = userService.updateUser(user, loginUser);
+        return ResultUtils.success(result);
+    }
+
+    /**
      * 删除用户
      * @param id 用户id
      * @param request 用户登录状态
@@ -156,7 +173,7 @@ public class UserController {
      */
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUser(@RequestBody int id, HttpServletRequest request) {
-        if (!isAdmin(request)) {
+        if (!userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH);
         }
         if (id < 0) {
@@ -164,17 +181,6 @@ public class UserController {
         }
         boolean result = userService.removeById(id);
         return ResultUtils.success(result);
-    }
-
-    /**
-     * 是否为管理员
-     * @param request 用户登录状态
-     * @return
-     */
-    private boolean isAdmin(HttpServletRequest request) {
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User user = (User) userObj;
-        return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
 }

@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.example.usercenterbackendmaster.constant.UserConstant.ADMIN_ROLE;
+import static com.example.usercenterbackendmaster.constant.UserConstant.USER_LOGIN_STATE;
+
 /**
 * @author dell
 * @description 针对表【user(用户)】的数据库操作Service
@@ -52,4 +55,32 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getSafetyUser(User originUser);
+
+    /**
+     * 更新用户信息
+     * @param user 用户信息
+     * @return
+     */
+    Integer updateUser(User user, User loginUser);
+
+    /**
+     * 获取当前登录用户信息
+     * @param request
+     * @return
+     */
+    User getLoginUser(HttpServletRequest request);
+
+    /**
+     * 是否为管理员
+     * @param request 用户登录状态
+     * @return
+     */
+    boolean isAdmin(HttpServletRequest request);
+
+    /**
+     * 是否为管理员
+     * @param loginUser 用户登录状态
+     * @return
+     */
+    boolean isAdmin(User loginUser);
 }

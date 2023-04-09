@@ -42,3 +42,8 @@ create table tag
 
 create index idx_userId
     on tag (userId);
+
+alter table user
+    add profile varchar(512) null comment '用户简介';
+
+
