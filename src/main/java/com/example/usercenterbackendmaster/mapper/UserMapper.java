@@ -10,8 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.example.usercenterbackendmaster.model.domain.User
 */
 public interface UserMapper extends BaseMapper<User> {
-
-    void updateById(long userId);
 }
 
 
