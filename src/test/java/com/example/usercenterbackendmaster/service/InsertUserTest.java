@@ -95,7 +95,7 @@ public class InsertUserTest {
     public void doInsertUser3() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        final int INSERT_NUM = 100000;
+        final int INSERT_NUM = 1000000;
         // 分十组
         int j = 0;
         //批量插入数据的大小
