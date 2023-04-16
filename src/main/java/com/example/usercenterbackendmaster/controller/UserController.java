@@ -7,8 +7,8 @@ import com.example.usercenterbackendmaster.common.ErrorCode;
 import com.example.usercenterbackendmaster.common.ResultUtils;
 import com.example.usercenterbackendmaster.exception.BusinessException;
 import com.example.usercenterbackendmaster.model.domain.User;
-import com.example.usercenterbackendmaster.model.domain.request.UserLoginRequest;
-import com.example.usercenterbackendmaster.model.domain.request.UserRegisterRequest;
+import com.example.usercenterbackendmaster.model.request.UserLoginRequest;
+import com.example.usercenterbackendmaster.model.request.UserRegisterRequest;
 import com.example.usercenterbackendmaster.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.example.usercenterbackendmaster.constant.UserConstant.ADMIN_ROLE;
 import static com.example.usercenterbackendmaster.constant.UserConstant.USER_LOGIN_STATE;
 
 /**

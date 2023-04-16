@@ -1,4 +1,4 @@
-package com.example.usercenterbackendmaster.model.domain.dto;
+package com.example.usercenterbackendmaster.model.dto;
 
 import com.example.usercenterbackendmaster.common.PageRequest;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.usercenterbackendmaster.model.domain.enums;
+package com.example.usercenterbackendmaster.model.enums;
 
 /**
  * 队伍状态枚举类

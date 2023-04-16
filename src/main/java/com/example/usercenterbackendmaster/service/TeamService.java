@@ -3,6 +3,10 @@ package com.example.usercenterbackendmaster.service;
 import com.example.usercenterbackendmaster.model.domain.Team;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.usercenterbackendmaster.model.domain.User;
+import com.example.usercenterbackendmaster.model.dto.TeamQuery;
+import com.example.usercenterbackendmaster.model.vo.TeamUserVO;
+
+import java.util.List;
 
 /**
 * @author dell
@@ -18,5 +22,13 @@ public interface TeamService extends IService<Team> {
      * @return
      */
     long addTeam(Team team, User loginUser);
+
+    /**
+     * 搜索队伍
+     * @param teamQuery 队伍信息
+     * @param isAdmin 是否为管理员
+     * @return
+     */
+    List<TeamUserVO> listTeams(TeamQuery teamQuery, boolean isAdmin);
 
 }
