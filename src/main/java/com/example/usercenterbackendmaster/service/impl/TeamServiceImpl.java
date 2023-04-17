@@ -9,6 +9,7 @@ import com.example.usercenterbackendmaster.model.domain.User;
 import com.example.usercenterbackendmaster.model.domain.UserTeam;
 import com.example.usercenterbackendmaster.model.dto.TeamQuery;
 import com.example.usercenterbackendmaster.model.enums.TeamStatusEnum;
+import com.example.usercenterbackendmaster.model.request.TeamUpdateRequest;
 import com.example.usercenterbackendmaster.model.vo.TeamUserVO;
 import com.example.usercenterbackendmaster.model.vo.UserVO;
 import com.example.usercenterbackendmaster.service.TeamService;
@@ -183,6 +184,35 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             teamUserVOList.add(teamUserVO);
         }
         return teamUserVOList;
+    }
+
+    @Override
+    public boolean updateTeam(TeamUpdateRequest teamUpdateRequest, User loginUser) {
+        if (teamUpdateRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = teamUpdateRequest.getId();
+        if (id == null || id <= 0 ) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Team oldTeam = this.getById(id);
+        if (oldTeam == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        // 只有队伍创建者或管理员可以修改
+        if (oldTeam.getUserId() != loginUser.getId() && !userService.isAdmin(loginUser)) {
+            throw new BusinessException(ErrorCode.NO_AUTH, "队伍信息不存在");
+        }
+        TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(teamUpdateRequest.getStatus());
+        if (statusEnum.equals(TeamStatusEnum.PRIVATE)) {
+            if (StringUtils.isNotBlank(teamUpdateRequest.getPassword())) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "加密房间必须设置密码");
+            }
+        }
+        Team updateTeam = new Team();
+        BeanUtils.copyProperties(teamUpdateRequest, updateTeam);
+        boolean result = this.updateById(updateTeam);
+        return result;
     }
 }
 
