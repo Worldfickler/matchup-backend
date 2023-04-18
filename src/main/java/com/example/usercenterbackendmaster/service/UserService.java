@@ -79,8 +79,9 @@ public interface UserService extends IService<User> {
 
     /**
      * 是否为管理员
-     * @param loginUser 用户登录状态
+     * @param loginUser 用户登录
      * @return
      */
     boolean isAdmin(User loginUser);
+
 }
