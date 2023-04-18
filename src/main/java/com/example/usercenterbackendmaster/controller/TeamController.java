@@ -11,10 +11,12 @@ import com.example.usercenterbackendmaster.model.domain.User;
 import com.example.usercenterbackendmaster.model.dto.TeamQuery;
 import com.example.usercenterbackendmaster.model.request.TeamAddRequest;
 import com.example.usercenterbackendmaster.model.request.TeamJoinRequest;
+import com.example.usercenterbackendmaster.model.request.TeamQuitRequest;
 import com.example.usercenterbackendmaster.model.request.TeamUpdateRequest;
 import com.example.usercenterbackendmaster.model.vo.TeamUserVO;
 import com.example.usercenterbackendmaster.service.TeamService;
 import com.example.usercenterbackendmaster.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -125,6 +127,16 @@ public class TeamController {
         }
         User loginUser = userService.getLoginUser(request);
         boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
+        return ResultUtils.success(result);
+    }
+
+    @PostMapping("/quit")
+    public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitRequest teamQuitRequest, HttpServletRequest request) {
+        if (teamQuitRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.quitTeam(teamQuitRequest, loginUser);
         return ResultUtils.success(result);
     }
 
