@@ -9,6 +9,7 @@ import com.example.usercenterbackendmaster.exception.BusinessException;
 import com.example.usercenterbackendmaster.model.domain.User;
 import com.example.usercenterbackendmaster.model.request.UserLoginRequest;
 import com.example.usercenterbackendmaster.model.request.UserRegisterRequest;
+import com.example.usercenterbackendmaster.model.vo.UserVO;
 import com.example.usercenterbackendmaster.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -217,5 +218,21 @@ public class UserController {
         boolean result = userService.removeById(id);
         return ResultUtils.success(result);
     }
+
+    /**
+     * 获取匹配用户
+     * @param num 推荐数据量
+     * @param request 用户登录信息
+     * @return
+     */
+    @GetMapping("/match")
+    public BaseResponse<List<User>> matchUsers (long num, HttpServletRequest request) {
+        if (num <= 0 || num > 20) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(userService.matchUsers(num, loginUser));
+    }
+
 
 }

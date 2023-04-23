@@ -3,6 +3,7 @@ package com.example.usercenterbackendmaster.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.usercenterbackendmaster.common.BaseResponse;
+import com.example.usercenterbackendmaster.common.DeleteRequest;
 import com.example.usercenterbackendmaster.common.ErrorCode;
 import com.example.usercenterbackendmaster.common.ResultUtils;
 import com.example.usercenterbackendmaster.exception.BusinessException;
@@ -27,10 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * 队伍接口
+ *
  * @author dell
  * @date 2023/4/14 8:31
  */
@@ -52,6 +55,7 @@ public class TeamController {
 
     /**
      * 添加队伍
+     *
      * @param teamAddRequest 队伍信息
      * @return
      */
@@ -99,6 +103,23 @@ public class TeamController {
         }
         boolean isAdmin = userService.isAdmin(request);
         List<TeamUserVO> teamList = teamService.listTeams(teamQuery, isAdmin);
+        // 判断当前用户是否已加入队伍
+        List<Long> teamIdList = teamList.stream().map(TeamUserVO::getId).collect(Collectors.toList());
+        QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
+        try {
+            User loginUser = userService.getLoginUser(request);
+            userTeamQueryWrapper.eq("userId", loginUser.getId());
+            userTeamQueryWrapper.in("teamId", teamIdList);
+            List<UserTeam> userTeamList = userTeamService.list(userTeamQueryWrapper);
+            // 已加入队伍的id集合
+            Set<Long> hasJoinTeamIdSet = userTeamList.stream().map(UserTeam::getTeamId).collect(Collectors.toSet());
+            teamList.forEach(team -> {
+                boolean hasJoin = hasJoinTeamIdSet.contains(team.getId());
+                team.setHasJoin(hasJoin);
+            });
+        } catch (Exception e) {
+
+        }
         return ResultUtils.success(teamList);
     }
 
@@ -136,10 +157,11 @@ public class TeamController {
     }
 
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody long id, HttpServletRequest request) {
-        if (id <= 0) {
+    public BaseResponse<Boolean> deleteTeam(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+        if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        long id = deleteRequest.getId();
         User loginUser = userService.getLoginUser(request);
         boolean result = teamService.deleteTeam(id, loginUser);
         if (!result) {
@@ -150,8 +172,9 @@ public class TeamController {
 
     /**
      * 获取当前用户创建的队伍
+     *
      * @param teamQuery 队伍查询信息
-     * @param request 用户登录信息
+     * @param request   用户登录信息
      * @return
      */
     @GetMapping("/list/my/create")
@@ -167,8 +190,9 @@ public class TeamController {
 
     /**
      * 获取当前用户加入的队伍
+     *
      * @param teamQuery 队伍查询信息
-     * @param request 用户登录信息
+     * @param request   用户登录信息
      * @return
      */
     @GetMapping("/list/my/join")

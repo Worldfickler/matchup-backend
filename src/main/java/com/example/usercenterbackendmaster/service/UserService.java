@@ -1,7 +1,9 @@
 package com.example.usercenterbackendmaster.service;
 
+import com.example.usercenterbackendmaster.common.BaseResponse;
 import com.example.usercenterbackendmaster.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.usercenterbackendmaster.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -83,5 +85,14 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean isAdmin(User loginUser);
+
+
+    /**
+     * 匹配用户
+     * @param num 匹配数量
+     * @param loginUser 用户登录
+     * @return
+     */
+    List<User> matchUsers(long num, User loginUser);
 
 }
