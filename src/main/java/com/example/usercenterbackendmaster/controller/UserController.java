@@ -9,7 +9,6 @@ import com.example.usercenterbackendmaster.exception.BusinessException;
 import com.example.usercenterbackendmaster.model.domain.User;
 import com.example.usercenterbackendmaster.model.request.UserLoginRequest;
 import com.example.usercenterbackendmaster.model.request.UserRegisterRequest;
-import com.example.usercenterbackendmaster.model.vo.UserVO;
 import com.example.usercenterbackendmaster.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +33,8 @@ import static com.example.usercenterbackendmaster.constant.UserConstant.USER_LOG
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = {"http://127.0.0.1:5173"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://127.0.0.1:5173", "http://192.168.56.1:3000"}, allowCredentials = "true")
+//@CrossOrigin(origins = {"http://192.168.56.1:3000"}, allowCredentials = "true")
 @Slf4j
 public class UserController {
 

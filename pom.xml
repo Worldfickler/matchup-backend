@@ -8,11 +8,10 @@
         <version>2.6.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.yupi</groupId>
-    <artifactId>user-center-backend</artifactId>
+    <artifactId>matchup-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user-center-backend</name>
-    <description>user-center-backend</description>
+    <name>matchup-backend</name>
+    <description>matchup-backend</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
